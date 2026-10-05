@@ -64,7 +64,7 @@ class MLP_Trainer(Trainer):
 
     def train_epoch(self):
         self.model.train()
-        log_freq = len(self.train_loader) // self.args.log_freq
+        log_freq = max(len(self.train_loader) // self.args.log_freq, 1)
         train_summary = 0.0
         for i, batch_data in enumerate(self.train_loader):
             train_log = self._process_batch(batch_data)

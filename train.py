@@ -48,8 +48,17 @@ def main(cfg: DictConfig) -> None:
     args = prepare_arguments(cfg)
 
     # WANDB
-    wandb.login(key=WANDB_API_KEY)
-    wandb.init(project=WANDB_PROJECT_NAME, entity=WANDB_ENTITY, name=args.exp_id)
+    if WANDB_API_KEY is not None:
+        wandb.login(key=WANDB_API_KEY)
+        wandb.init(project=WANDB_PROJECT_NAME, entity=WANDB_ENTITY, name=args.exp_id)
+    else:
+        # 匿名离线模式：无需 wandb 账号，数据保存在本地 ./wandb 目录
+        wandb.init(
+            project=WANDB_PROJECT_NAME,
+            name=args.exp_id,
+            anonymous="must",
+            mode="offline",
+        )
     wandb.config.update(args)
 
     # Logger
